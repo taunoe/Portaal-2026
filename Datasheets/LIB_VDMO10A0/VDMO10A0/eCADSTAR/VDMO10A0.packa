@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "VDMO10A0"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2019-03-07-17:51:21)
+    (mountForm default
+        (footprintRef "VDMO10A0")
+        (spec "System")
+    )
+)

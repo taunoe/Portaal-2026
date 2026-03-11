@@ -1,0 +1,9 @@
+Manufacturer=Vishay
+PartNumber=VDMO10A0
+PartCategory=Display
+PackageCategory=Other
+PinCount=10
+Version=1.2
+Released=2019-03-07 17:51:21
+Downloaded=2026-02-15 13:51:02
+3D=Y

@@ -1,0 +1,18 @@
+.74HC595D_112 :1 ;74HC(T)595 - 8-bit serial-in, serial or parallel-out shift register with output latches; 3-state@en-us
+SOIC127P600X175-16N
+*STM IC
+*NGS
+*PLB 1="Q1" 2="Q2" 3="Q3" 4="Q4" 5="Q5" 6="Q6" 7="Q7" 8="GND" 9="Q7S" 10="'MR'" 11="SHCP" 12="STCP" 13="'OE'" 14="DS" 15="Q0" 16="VCC"
+*MXP 16
+*DFN 74HC595D_112
+~!Manufacturer_Name (Nexperia)
+~!Manufacturer_Part_Number (74HC595D,112)
+~!Mouser Part Number (771-74HC595D)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Nexperia/74HC595D112?qs=P62ublwmbi9CWen68lvwew%3D%3D)
+~!Arrow Part Number (74HC595D,112)
+~!Link Arrow Price/Stock (https://www.arrow.com/en/products/74hc595d112/nexperia?region=nac)
+~!Link Datasheet (https://assets.nexperia.com/documents/data-sheet/74HC_HCT595.pdf)
+~!Height (1.75mm)
+~!3D_Model (74HC595D,112)
+"74HC595D_112"
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 16.1!U 15.1!U 14.1!U 13.1!U 12.1!U 11.1!U 10.1!U 9.1!U 

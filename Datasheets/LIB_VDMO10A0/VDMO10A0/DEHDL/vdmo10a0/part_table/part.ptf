@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'VDMO10A0'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "FARNELL_PART_NUMBER", "FARNELL_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Vishay", "VDMO10A0" (!) = "", "VDMO10A0", "Other", "", "", "VISHAY - VDMO10A0 - DISPLAY, SEVEN SEGMENT, 10MM, ORANGE", "https://www.vishay.com/docs/84196/vdmx10x0.pdf", "3.75 mm"
+END_PART
+
+END.

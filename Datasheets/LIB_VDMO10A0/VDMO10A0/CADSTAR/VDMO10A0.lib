@@ -1,0 +1,16 @@
+.VDMO10A0 :1 ;VISHAY - VDMO10A0 - DISPLAY, SEVEN SEGMENT, 10MM, ORANGE
+VDMO10A0
+*STM DS
+*NGS
+*PLB 1="CATHODE E" 2="CATHODE D" 3="COMMON ANODE_1" 4="CATHODE C" 5="CATHODE DP" 6="CATHODE B" 7="CATHODE A" 8="COMMON ANODE_2" 9="CATHODE F" 10="CATHODE G"
+*MXP 10
+*DFN VDMO10A0
+~!Farnell Part Number (-)
+~!Farnell Price/Stock (-)
+~!Manufacturer_Name (Vishay)
+~!Manufacturer_Part_Number (VDMO10A0)
+~!Link Datasheet (https://www.vishay.com/docs/84196/vdmx10x0.pdf)
+~!Height (3.75mm)
+~!3D_Model (VDMO10A0)
+VDMO10A0
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 9.1!U 10.1!U 

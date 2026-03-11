@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP VDMO10A0
+D VISHAY - VDMO10A0 - DISPLAY, SEVEN SEGMENT, 10MM, ORANGE
+K
+F https://www.vishay.com/docs/84196/vdmx10x0.pdf
+$ENDCMP
+#
+#End Doc Library
