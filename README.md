@@ -1,5 +1,18 @@
 # Portaal
 
+## Hardware
+
+- PCB "Portaal"
+- CH32V003F4P6 Board
+
+## PCB "Portaal" Schematics
+
+![Schematics](skeem.png)
+
+![PCB Schematics](PCB_skeem.png)
+
+## Pins
+
 |label|    name|connected|
 |-----|--------|---------|
 |    G|     GND|      GND|
