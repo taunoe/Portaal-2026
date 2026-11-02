@@ -23,3 +23,8 @@
 |    L|    Lach|      PC1|
 |    D| Data In|      PC6|
 |    +|     VCC|     3.3V|
+
+![Portaal PCB photo](img/IMG_5361.jpg)
+
+____
+Tauno Erik 2026
