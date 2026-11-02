@@ -1,5 +1,5 @@
 ################################################################################
-# MRS Version: 2.4.0
+# MRS Version: 3.0.0
 # Automatically-generated file. Do not edit!
 ################################################################################
 
@@ -24,6 +24,6 @@ DIR_EXPANDS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Startup/%.o: ../Startup/%.S
-	@	riscv-none-embed-gcc -march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized -g -x assembler-with-cpp -I"/home/tauno/mounriver-studio-projects/CH32V003F4P_shift_registers/Startup" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+Startup/%.o: ../Startup/%.S $(FLAGS_ASM_FILE)
+	@	riscv-none-embed-gcc -march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized -g -x assembler-with-cpp -I"/home/tauno/KETTAS1/MyGitHub/Portaal-2026/CH32V003F4P_shift_registers/Startup" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 

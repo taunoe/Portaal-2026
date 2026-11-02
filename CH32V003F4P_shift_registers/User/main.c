@@ -23,14 +23,8 @@
  */
 
 #include "debug.h"
+#include "config.h"
 
-
-/* Global define */
-// Define our pins on Port C
-#define DATA_PIN  GPIO_Pin_0
-#define CLOCK_PIN GPIO_Pin_1
-#define LATCH_PIN GPIO_Pin_2
-#define GPIO_PORT GPIOC
 
 
 /* Global Variable */
@@ -133,15 +127,15 @@ void SPI_1_config(void) {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_SPI1, ENABLE);
 
     // PC5 (SCK) & PC6 (MOSI) as Alternate Function Push-Pull
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Pin = CLOCK_PIN | DATA_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_Init(SPI_PORT, &GPIO_InitStructure);
 
     // PC1 (Latch) as standard Output
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+    GPIO_InitStructure.GPIO_Pin = LATCH_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_Init(SPI_PORT, &GPIO_InitStructure);
 
     SPI_InitStructure.SPI_Direction = SPI_Direction_1Line_Tx;
     SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
@@ -157,7 +151,7 @@ void SPI_1_config(void) {
 }
 
 void SPI_send_data(uint32_t data) {
-    GPIO_WriteBit(GPIOC, GPIO_Pin_1, Bit_RESET); // Latch LOW
+    GPIO_WriteBit(SPI_PORT, LATCH_PIN, Bit_RESET); // Latch LOW
 
     // Send 4 bytes (32 bits)
     for(int i = 3; i >= 0; i--) {
@@ -167,7 +161,7 @@ void SPI_send_data(uint32_t data) {
 
     // Wait for last byte to finish
     while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_BSY) == SET);
-    GPIO_WriteBit(GPIOC, GPIO_Pin_1, Bit_SET); // Latch HIGH
+    GPIO_WriteBit(SPI_PORT, LATCH_PIN, Bit_SET); // Latch HIGH
 }
 
 /*********************************************************************
@@ -197,22 +191,28 @@ int main(void)
     USARTx_CFG();
 
     //uint8_t pattern = 0x01;
-    uint32_t data = 0x01;
+    uint32_t data = PATERN;
     uint32_t last_update_time = 0;
-    const uint32_t interval = 15; // 100ms update rate
+    const uint32_t interval = 100; // ms update rate
+
+    SPI_send_data(0);
 
     while(1)
     {
         if (global_ms - last_update_time >= interval) {
             last_update_time = global_ms;
 
+            //printf("%d\r\n", data);
             SPI_send_data(data);
 
             // Rotate bits for a "running light" effect
+            
             data = (data << 1);
             if (data == 0) {
-                data = 0x01;
+                data = PATERN;
             }
+            
         }
     } // while end
 }
+
