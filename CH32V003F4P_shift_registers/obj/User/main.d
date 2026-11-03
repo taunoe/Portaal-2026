@@ -22,7 +22,7 @@ User/main.o: ../User/main.c \
  /home/tauno/KETTAS1/MyGitHub/Portaal-2026/CH32V003F4P_shift_registers/Peripheral/inc/ch32v00x_wwdg.h \
  /home/tauno/KETTAS1/MyGitHub/Portaal-2026/CH32V003F4P_shift_registers/Peripheral/inc/ch32v00x_opa.h \
  /home/tauno/KETTAS1/MyGitHub/Portaal-2026/CH32V003F4P_shift_registers/Peripheral/inc/ch32v00x.h \
- ../User/config.h
+ ../User/config.h ../User/data.h
 
 /home/tauno/KETTAS1/MyGitHub/Portaal-2026/CH32V003F4P_shift_registers/Debug/debug.h:
 
@@ -71,3 +71,5 @@ User/main.o: ../User/main.c \
 /home/tauno/KETTAS1/MyGitHub/Portaal-2026/CH32V003F4P_shift_registers/Peripheral/inc/ch32v00x.h:
 
 ../User/config.h:
+
+../User/data.h:

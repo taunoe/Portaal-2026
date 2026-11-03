@@ -1,47 +1,39 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : Tauno Erik
  * Version            : V1.0.0
- * Date               : 2023/12/25
+ * Date               : 2026-11-03
  * Description        : Main program body.
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
  *******************************************************************************/
 
-/*
- *@Note
- *Multiprocessor communication mode routine:
- *Master:USART1_Tx(PD5)\USART1_Rx(PD6).
- *This routine demonstrates that USART1 receives the data sent by CH341 and inverts
- *it and sends it (baud rate 115200).
- *
- *Hardware connection:PD5 -- Rx
- *                     PD6 -- Tx
- *
- */
+/**********************************************************************
+@Note
+USART1_Tx(PD5)
+USART1_Rx(PD6)
+ 
+Baud rate 115200
+ 
+Hardware connection:
+PD5 --> Rx
+PD6 --> Tx
+**************************************************************************/
 
 #include "debug.h"
 #include "config.h"
-
-
-
-/* Global Variable */
-vu8 val;
+#include "data.h"
 
 // Global tick counter
 volatile uint32_t global_ms = 0;
 
+
 /*********************************************************************
- * @fn      USARTx_CFG
- *
- * @brief   Initializes the USART2 & USART3 peripheral.
- *
- * @return  none
+ * USART1 config
+ * Baud Rate
+ * PORTD
+ * PD5
+ * PD6
  */
-void USARTx_CFG(void)
-{
+void USARTx_CFG(void) {
     GPIO_InitTypeDef  GPIO_InitStructure = {0};
     USART_InitTypeDef USART_InitStructure = {0};
 
@@ -56,7 +48,7 @@ void USARTx_CFG(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-    USART_InitStructure.USART_BaudRate = 115200;
+    USART_InitStructure.USART_BaudRate = APP_BAUDRATE;
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
     USART_InitStructure.USART_StopBits = USART_StopBits_1;
     USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -120,6 +112,9 @@ void SysTick_Init(void) {
     NVIC_EnableIRQ(SysTick_IRQn);
 }
 
+/*
+ *
+ */
 void SPI_1_config(void) {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
     SPI_InitTypeDef  SPI_InitStructure = {0};
@@ -130,12 +125,12 @@ void SPI_1_config(void) {
     GPIO_InitStructure.GPIO_Pin = CLOCK_PIN | DATA_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(SPI_PORT, &GPIO_InitStructure);
+    GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
 
     // PC1 (Latch) as standard Output
     GPIO_InitStructure.GPIO_Pin = LATCH_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_Init(SPI_PORT, &GPIO_InitStructure);
+    GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
 
     SPI_InitStructure.SPI_Direction = SPI_Direction_1Line_Tx;
     SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
@@ -150,10 +145,13 @@ void SPI_1_config(void) {
     SPI_Cmd(SPI1, ENABLE);
 }
 
-void SPI_send_data(uint32_t data) {
-    GPIO_WriteBit(SPI_PORT, LATCH_PIN, Bit_RESET); // Latch LOW
 
-    // Send 4 bytes (32 bits)
+/*
+ * Sends 4 bytes (32 bits)
+ */
+void SPI_send_data(uint32_t data) {
+    GPIO_WriteBit(SPI1_PORT, LATCH_PIN, Bit_RESET); // Latch LOW
+
     for(int i = 3; i >= 0; i--) {
         while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
         SPI_I2S_SendData(SPI1, (uint8_t)(data >> (i * 8)));
@@ -161,39 +159,52 @@ void SPI_send_data(uint32_t data) {
 
     // Wait for last byte to finish
     while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_BSY) == SET);
-    GPIO_WriteBit(SPI_PORT, LATCH_PIN, Bit_SET); // Latch HIGH
+
+    GPIO_WriteBit(SPI1_PORT, LATCH_PIN, Bit_SET); // Latch HIGH
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   Main program.
- *
- * @return  none
- */
+
+// 32-bitine paremale p??ramine
+uint32_t rotate_right_32(uint32_t value, uint8_t shift) {
+    shift &= 31; // Tagab, et nihe on vahemikus 0-31
+    if (shift == 0) return value;
+    return (value >> shift) | (value << (32 - shift));
+}
+
+// 32-bitine vasakule p??ramine
+uint32_t rotate_left_32(uint32_t value, uint8_t shift) {
+    shift &= 31;
+    if (shift == 0) return value;
+    return (value << shift) | (value >> (32 - shift));
+}
+
+
 int main(void)
 {
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1); // 2?
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
     //GPIO_Config();
     SPI_1_config();
     SysTick_Init();
 
+    USARTx_CFG();
+
 #if (SDI_PRINT == SDI_PR_OPEN)
     SDI_Printf_Enable();
 #else
-    USART_Printf_Init(115200);
+    USART_Printf_Init(APP_BAUDRATE);
 #endif
-    printf("SystemClk:%d\r\n",SystemCoreClock);
-    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
-    USARTx_CFG();
+    printf("SystemClk:%d\r\n",SystemCoreClock);
+    printf("ChipID:%08x\r\n", DBGMCU_GetCHIPID());
+
+    
 
     //uint8_t pattern = 0x01;
     uint32_t data = PATERN;
     uint32_t last_update_time = 0;
-    const uint32_t interval = 100; // ms update rate
+    const uint32_t interval = 90; // ms update rate
 
     SPI_send_data(0);
 
@@ -202,15 +213,10 @@ int main(void)
         if (global_ms - last_update_time >= interval) {
             last_update_time = global_ms;
 
-            //printf("%d\r\n", data);
             SPI_send_data(data);
-
-            // Rotate bits for a "running light" effect
             
-            data = (data << 1);
-            if (data == 0) {
-                data = PATERN;
-            }
+            //data = rotate_left_32(data, 1);
+            data = rotate_right_32(data, 1);
             
         }
     } // while end
